@@ -1,198 +1,356 @@
-# 🏥 MediPredict — Medical Insurance Price Prediction
+# 🏥 MediPredict - Medical Insurance Price Prediction
 
-A production-ready end-to-end machine learning web application that predicts
-annual **medical insurance charges** based on a person's age, sex, BMI,
-number of children, smoking status, and region. Built with **Flask**,
-**Scikit-Learn**, and **Bootstrap 5**, with user authentication and an
-interactive analytics dashboard.
+<p align="center">
 
----
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-Web_App-black?logo=flask)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange?logo=scikitlearn)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?logo=bootstrap)
+![SQLite](https://img.shields.io/badge/SQLite-Database-blue?logo=sqlite)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## ✨ Features
+</p>
 
-- **ML pipeline** — modular data ingestion → transformation → model training
-  components, trained on 9 candidate regression models with hyperparameter
-  search via `GridSearchCV`, auto-selecting the best performer by R² score.
-- **Authentication** — secure signup/login with hashed passwords
-  (`Flask-Login` + `Werkzeug`), session management, and per-user prediction
-  history stored in SQLite.
-- **Prediction UI** — a clean Bootstrap form that calls the trained model and
-  returns an instant estimated charge.
-- **Dashboard & Charts** — Chart.js visualizations for:
-  - Average charges: smoker vs non-smoker
-  - Average charges by region
-  - Average charges by age group
-  - BMI vs charges scatter plot
-  - Model comparison (R² across all trained models)
-  - Your personal prediction history over time
-- **Production practices** — custom exception handling, structured logging,
-  `.pkl` artifact persistence, config via environment variables, WSGI entry
-  point for deployment (Gunicorn / Elastic Beanstalk).
+A production-ready **Machine Learning Web Application** that predicts medical insurance charges based on demographic and health-related attributes.
+
+The application is built using **Python, Flask, Scikit-Learn, Bootstrap 5, SQLite**, and follows an end-to-end Machine Learning workflow including data preprocessing, model training, authentication, dashboards, and interactive visualizations.
 
 ---
 
-## 📂 Project Structure
+# 🚀 Features
 
-```
-MLPROJECT/
+### Machine Learning
+
+- End-to-End ML Pipeline
+- Automated Data Ingestion
+- Data Transformation Pipeline
+- Feature Engineering
+- Model Training & Evaluation
+- Hyperparameter Tuning using GridSearchCV
+- Automatic Best Model Selection
+- Model Serialization using Pickle
+
+### Web Application
+
+- User Registration
+- Secure Login & Logout
+- Password Hashing
+- Prediction History
+- Interactive Dashboard
+- Responsive Bootstrap UI
+
+### Dashboard Analytics
+
+- Average Charges (Smoker vs Non-Smoker)
+- Average Charges by Region
+- Average Charges by Age Group
+- BMI vs Charges Scatter Plot
+- Model Comparison (R² Scores)
+- Personal Prediction History
+
+### Production Features
+
+- Custom Exception Handling
+- Logging
+- Modular Project Structure
+- Environment Variable Support
+- SQLite Database
+- Deployment Ready
+
+---
+
+# 📷 Screenshots
+
+## Home Page
+
+![Home Page](/web/static/images/home.png)
+---
+
+## Prediction Page
+
+![Prediction Page](/web/static/images/predict.png)
+
+---
+
+## Dashboard
+
+Prediction Page
+
+![Dashboard](/web/static/images/Dashboard.png)
+
+---
+
+## Analytics
+
+
+
+![Charts](/web/static/images/charts.png)
+
+---
+
+# 📂 Project Structure
+
+```text
+Medical_Insurance_Prediction/
+
 │
-├── artifacts/                     # Generated at training time
-│   ├── data.csv                   # Cleaned full dataset
-│   ├── train.csv / test.csv       # Train/test split
-│   ├── model.pkl                  # Best trained model
-│   ├── preprocessor.pkl           # Fitted ColumnTransformer
-│   └── metrics.json               # Model evaluation report
-│
+├── artifacts/
 ├── data/
-│   └── insurance.csv              # Raw source dataset
-│
-├── logs/                          # Rotating run logs (gitignored)
+├── instance/
+├── logs/
 │
 ├── src/
-│   ├── exception.py               # CustomException with file/line context
-│   ├── logger.py                  # App-wide logger configuration
-│   ├── utils.py                   # save/load objects, model evaluation helpers
-│   │
 │   ├── components/
-│   │   ├── data_ingestion.py      # Reads CSV, cleans, splits train/test
-│   │   ├── data_transformation.py # Builds & fits preprocessing pipeline
-│   │   └── model_trainer.py       # Trains, tunes, selects best model
-│   │
-│   └── pipeline/
-│       ├── train_pipeline.py      # Orchestrates the full training run
-│       └── predict_pipeline.py    # Loads artifacts, serves predictions
+│   ├── pipeline/
+│   ├── logger.py
+│   ├── exception.py
+│   └── utils.py
 │
-├── templates/                     # Jinja2 + Bootstrap templates
-│   ├── base.html, index.html
-│   ├── login.html, register.html
-│   ├── home.html                  # Prediction form
-│   ├── dashboard.html             # Charts & history
-│   └── errors/404.html, 500.html
+├── web/
+│   ├── templates/
+│   ├── static/
+│   ├── forms.py
+│   ├── models.py
+│   └── extensions.py
 │
-├── static/
-│   ├── css/style.css
-│   └── js/dashboard.js            # Chart.js rendering logic
-│
-├── extensions.py                  # Flask-SQLAlchemy / Flask-Login instances
-├── models.py                      # User, PredictionHistory ORM models
-├── forms.py                       # WTForms: Register / Login / Prediction
-├── app.py                         # Flask app factory + all routes
-├── application.py                 # WSGI entry point for deployment
+├── app.py
+├── application.py
 ├── requirements.txt
 ├── setup.py
-├── .gitignore
 └── README.md
 ```
 
 ---
 
-## ⚙️ Setup
+# ⚙️ Installation
 
-### 1. Clone & create a virtual environment
+## Clone Repository
+
+```bash
+git clone https://github.com/yourusername/Medical_Insurance_Prediction.git
+
+cd Medical_Insurance_Prediction
+```
+
+---
+
+## Create Virtual Environment
+
+### Windows
 
 ```bash
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+
+venv\Scripts\activate
 ```
 
-### 2. Install dependencies
+### Linux / Mac
+
+```bash
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+---
+
+## Install Requirements
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Train the model
+---
 
-This reads `data/insurance.csv`, runs the full ingestion → transformation →
-training pipeline, and writes `model.pkl`, `preprocessor.pkl`, and
-`metrics.json` into `artifacts/`.
+## Train Model
 
 ```bash
 python -m src.pipeline.train_pipeline
 ```
 
-Expected output:
+Artifacts generated
+
 ```
-Best model: Random Forest Regressor | R2 score: 0.90
+model.pkl
+
+preprocessor.pkl
+
+metrics.json
 ```
 
-### 4. Run the app
+---
+
+## Run Application
 
 ```bash
 python app.py
 ```
 
-Visit **http://localhost:5000**, sign up for an account, and start predicting.
+Open
 
-### 5. Production deployment
-
-```bash
-gunicorn application:application
 ```
-
-Set these environment variables in production:
-
-| Variable       | Purpose                                  |
-|----------------|-------------------------------------------|
-| `SECRET_KEY`   | Flask session/CSRF signing key            |
-| `DATABASE_URL` | SQLAlchemy DB URI (defaults to SQLite)    |
+http://127.0.0.1:5000
+```
 
 ---
 
-## 🧠 Dataset
+# 📊 Dataset
 
-The model is trained on `data/insurance.csv` (2,772 records) with columns:
+Dataset contains the following features
 
-| Column     | Type    | Description                          |
-|------------|---------|----------------------------------------|
-| `age`      | int     | Age of primary beneficiary             |
-| `sex`      | string  | `male` / `female`                      |
-| `bmi`      | float   | Body mass index                        |
-| `children` | int     | Number of dependents                   |
-| `smoker`   | string  | `yes` / `no`                           |
-| `region`   | string  | `northeast`, `northwest`, `southeast`, `southwest` |
-| `charges`  | float   | **Target** — annual medical charges ($)|
+| Feature | Description |
+|----------|-------------|
+| Age | Age of primary beneficiary |
+| Sex | Male/Female |
+| BMI | Body Mass Index |
+| Children | Number of Dependents |
+| Smoker | Yes/No |
+| Region | Residential Region |
+| Charges | Medical Insurance Cost (Target Variable) |
 
-## 🤖 Model Training Details
+---
 
-`ModelTrainer` evaluates the following regressors with grid-searched
-hyperparameters, and persists the highest scoring one:
+# 🤖 Models Evaluated
 
-- Linear Regression, Ridge, Lasso
-- K-Neighbors Regressor
-- Decision Tree
+The following regression algorithms were trained and compared.
+
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- K-Nearest Neighbors Regressor
+- Decision Tree Regressor
 - Random Forest Regressor
 - Gradient Boosting Regressor
 - AdaBoost Regressor
-- SVR
+- Support Vector Regressor (SVR)
 
-Preprocessing (`DataTransformation`) scales numeric features
-(`age`, `bmi`, `children`) with `StandardScaler` and one-hot encodes
-categorical features (`sex`, `smoker`, `region`).
+The model with the highest **R² Score** is automatically selected and saved.
 
-## 🔐 Authentication
+---
 
-- Passwords are hashed with Werkzeug's `generate_password_hash` — never
-  stored in plaintext.
-- Sessions are managed by `Flask-Login`.
-- All prediction and dashboard routes are protected with `@login_required`.
-- Each user only ever sees their own prediction history.
+# 📈 Machine Learning Workflow
 
-## 📊 API Endpoints (used internally by the dashboard)
+```
+Dataset
 
-| Endpoint                  | Description                                   |
-|----------------------------|------------------------------------------------|
-| `GET /api/dataset-summary` | Aggregated dataset stats for charts           |
-| `GET /api/model-scores`    | R² score per trained candidate model          |
-| `GET /api/my-history`      | Current user's prediction history (JSON)      |
+↓
 
-## 🛠 Tech Stack
+Data Ingestion
 
-- **Backend**: Flask, Flask-Login, Flask-SQLAlchemy, Flask-WTF
-- **ML**: Scikit-Learn, Pandas, NumPy, dill
-- **Frontend**: Bootstrap 5, Bootstrap Icons, Chart.js
-- **Database**: SQLite (swap `DATABASE_URL` for Postgres/MySQL in production)
+↓
 
-## 📄 License
+Train-Test Split
 
-MIT — feel free to use and adapt this project.
+↓
+
+Data Transformation
+
+↓
+
+Feature Scaling
+
+↓
+
+Model Training
+
+↓
+
+Hyperparameter Tuning
+
+↓
+
+Model Evaluation
+
+↓
+
+Best Model Selection
+
+↓
+
+Prediction Pipeline
+
+↓
+
+Flask Application
+```
+
+---
+
+# 🔐 Authentication
+
+- User Registration
+- Secure Login
+- Password Hashing
+- Session Management
+- Protected Dashboard
+- User-specific Prediction History
+
+---
+
+# 📊 Dashboard
+
+The application includes an analytics dashboard containing:
+
+- Model Performance Comparison
+- Average Charges by Region
+- Average Charges by Age Group
+- Smoker vs Non-Smoker Comparison
+- BMI vs Charges
+- Personal Prediction History
+
+---
+
+# 🛠 Tech Stack
+
+### Backend
+
+- Python
+- Flask
+- Flask-WTF
+- Flask-Login
+- Flask-SQLAlchemy
+
+### Machine Learning
+
+- Scikit-Learn
+- Pandas
+- NumPy
+
+### Frontend
+
+- HTML5
+- CSS3
+- Bootstrap 5
+- Bootstrap Icons
+- Chart.js
+
+### Database
+
+- SQLite
+
+---
+
+# 📦 Future Improvements
+
+- Docker Support
+- PostgreSQL Integration
+- REST API
+- Admin Dashboard
+- User Profile Management
+- Model Retraining from Dashboard
+- Cloud Deployment (AWS / Render / Azure)
+
+---
+
+# 👨‍💻 Author
+
+**Shubham Mane**
+
+GitHub: https://github.com/ShubhamMane1211
+
+LinkedIn: https://linkedin.com/in/shubhammane1211
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.

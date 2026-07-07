@@ -1,0 +1,39 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Flask / instance
+instance/
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Artifacts (generated at training time — regenerate with train_pipeline.py)
+artifacts/*.pkl
+artifacts/*.csv
+artifacts/*.json
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Packaging
+*.egg-info/
+build/
+dist/

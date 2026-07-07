@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Predict Charges — MediPredict{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h3 class="fw-bold mb-1">Estimate Insurance Charges</h3>
+                    <p class="text-secondary mb-4">Fill in the details below to get an instant prediction.</p>
+
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                {{ form.age.label(class="form-label") }}
+                                {{ form.age(class="form-control" + (" is-invalid" if form.age.errors else ""), placeholder="e.g. 34") }}
+                                {% for error in form.age.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.sex.label(class="form-label") }}
+                                {{ form.sex(class="form-select") }}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.bmi.label(class="form-label") }}
+                                {{ form.bmi(class="form-control" + (" is-invalid" if form.bmi.errors else ""), placeholder="e.g. 27.3") }}
+                                {% for error in form.bmi.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.children.label(class="form-label") }}
+                                {{ form.children(class="form-control" + (" is-invalid" if form.children.errors else ""), placeholder="e.g. 2") }}
+                                {% for error in form.children.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.smoker.label(class="form-label") }}
+                                {{ form.smoker(class="form-select") }}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.region.label(class="form-label") }}
+                                {{ form.region(class="form-select") }}
+                            </div>
+                        </div>
+                        <button type="submit" name="submit" class="btn btn-primary w-100 py-2 mt-4">
+                            <i class="bi bi-lightning-charge-fill me-1"></i> Predict Charges
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100 result-card">
+                <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center text-center">
+                    {% if prediction is not none %}
+                        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+                        <p class="text-secondary mb-1">Estimated Annual Charge</p>
+                        <h1 class="fw-bold text-primary display-6">${{ "{:,.2f}".format(prediction) }}</h1>
+                        <p class="text-secondary small mt-3 mb-0">
+                            This is a model estimate based on historical data and should not
+                            be treated as an official quote.
+                        </p>
+                    {% else %}
+                        <i class="bi bi-graph-up-arrow fs-1 text-secondary mb-3"></i>
+                        <h5 class="fw-semibold">Your Prediction Will Appear Here</h5>
+                        <p class="text-secondary mb-0">Complete the form to see your estimated charges.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

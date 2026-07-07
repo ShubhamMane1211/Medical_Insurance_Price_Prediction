@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — MediPredict{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Dashboard</h3>
+            <p class="text-secondary mb-0">Welcome back, {{ current_user.name }}</p>
+        </div>
+        <a href="{{ url_for('predict') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> New Prediction
+        </a>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card p-3">
+                <div class="stat-icon bg-primary-soft text-primary"><i class="bi bi-clipboard-data-fill"></i></div>
+                <div>
+                    <div class="stat-value">{{ stats.total_predictions }}</div>
+                    <div class="stat-label">Your Predictions</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card p-3">
+                <div class="stat-icon bg-success-soft text-success"><i class="bi bi-currency-dollar"></i></div>
+                <div>
+                    <div class="stat-value">${{ "{:,.0f}".format(stats.avg_predicted_charge) }}</div>
+                    <div class="stat-label">Avg. Predicted Charge</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card p-3">
+                <div class="stat-icon bg-warning-soft text-warning"><i class="bi bi-stars"></i></div>
+                <div>
+                    <div class="stat-value">{{ (metrics.r2_score * 100) | round(1) if metrics.r2_score else "—" }}%</div>
+                    <div class="stat-label">Model R² Score</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card p-3">
+                <div class="stat-icon bg-info-soft text-info"><i class="bi bi-clock-history"></i></div>
+                <div>
+                    <div class="stat-value fs-6">{{ stats.last_prediction }}</div>
+                    <div class="stat-label">Last Prediction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts row 1 -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">Average Charges: Smoker vs Non-Smoker</h6>
+                <canvas id="smokerChart" height="220"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">Average Charges by Region</h6>
+                <canvas id="regionChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">Average Charges by Age Group</h6>
+                <canvas id="ageChart" height="220"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">BMI vs Charges (Sample)</h6>
+                <canvas id="bmiChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">Model Comparison (R² Score)</h6>
+                <canvas id="modelChart" height="240"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-card p-4">
+                <h6 class="fw-semibold mb-3">Your Prediction History</h6>
+                <canvas id="historyChart" height="240"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- History table -->
+    <div class="chart-card p-4">
+        <h6 class="fw-semibold mb-3">Recent Predictions</h6>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Date</th><th>Age</th><th>Sex</th><th>BMI</th>
+                        <th>Children</th><th>Smoker</th><th>Region</th><th>Predicted Charge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history[:10] %}
+                    <tr>
+                        <td>{{ h.created_at.strftime("%b %d, %Y %I:%M %p") }}</td>
+                        <td>{{ h.age }}</td>
+                        <td class="text-capitalize">{{ h.sex }}</td>
+                        <td>{{ h.bmi }}</td>
+                        <td>{{ h.children }}</td>
+                        <td class="text-capitalize">{{ h.smoker }}</td>
+                        <td class="text-capitalize">{{ h.region }}</td>
+                        <td class="fw-semibold">${{ "{:,.2f}".format(h.predicted_charge) }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" class="text-center text-secondary py-4">No predictions yet — try the <a href="{{ url_for('predict') }}">predictor</a>.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

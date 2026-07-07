@@ -1,0 +1,16 @@
+Flask
+Flask-Login
+Flask-SQLAlchemy
+Flask-WTF
+WTForms
+Werkzeug
+scikit-learn
+pandas
+numpy
+seaborn
+matplotlib
+dill
+python-dotenv
+email-validator
+gunicorn
+
